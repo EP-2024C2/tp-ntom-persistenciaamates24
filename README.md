@@ -1,8 +1,8 @@
-# Estrategias de Persistencia - TP 2024
+<h1> Estrategias de Persistencia - TP 2024 </h1>
 
 Esta Api se desarrolla con el fin de que una empresa gestione y administre su inventario de computadoras y sus componentes, pueda guardar toda la informacion en una base de datos con el fin de agrupar las computadoras con sus componentes y asi mismo con los fabricantes correspondientes.
 
-##Para iniciar con la utilizacion del mismo se deben realizar los siguientes pasos:
+<h2>Para iniciar con la utilizacion del mismo se deben realizar los siguientes pasos:</h2>
 
     1.Se debe descargar la Api para su uso.
     2.Ya descargado se debe abrir la carpeta en editor de codigo fuente.
@@ -14,7 +14,7 @@ Esta Api se desarrolla con el fin de que una empresa gestione y administre su in
 Esta Api esta preparada y pensada para correr en cualquier motor de base de datos, por mas que su desarrollo fue en SQLite, la misma es compatible con el motor de base de datos que la empresa quiera usar.
 
 
-##La consideracion para tener en cuenta son:
+<h2>La consideracion para tener en cuenta son:</h2>
 
 - Un Producto puede tener muchos fabricantes, y un Fabricante puede fabricar muchos productos.
 - Un Producto puede tener muchos componentes, y un Componente puede formar parte de varios productos.
@@ -24,7 +24,7 @@ Esto se demuestra en el siguiente esquema de entidad de relaciones:
 ![DER](DER.png)
 
 
-##La forma de cargar, actualizar o eliminar fabricantes, preductos y componentes son:
+<h2>La forma de cargar, actualizar o eliminar fabricantes, preductos y componentes son:</h2>
 
 |Verbo|Recurso|Status code|Descripción|
 |-----|-------|-----------|-----------|
