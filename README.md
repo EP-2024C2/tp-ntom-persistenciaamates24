@@ -81,5 +81,3 @@ El siguiente esquema ilustra estas relaciones en un diagrama de entidad-relació
 | PUT    | https://localhost:XXXX/componentes/:id        | 200, 404           | Modificar los datos de un componente en particular        |
 | DELETE | https://localhost:XXXX/componentes/:id        | 200, 404, 500      | Borrar un componente en particular                        |
 | GET    | https://localhost:XXXX/componentes/:id/productos | 200, 404          | Obtener todos los productos de un componente              |
-
-# database_development.sqlite
