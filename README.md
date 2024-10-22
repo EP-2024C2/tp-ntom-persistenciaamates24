@@ -53,7 +53,7 @@ Estas APIs están diseñadas para ser compatibles con cualquier motor de base de
 
 El siguiente esquema ilustra estas relaciones en un diagrama de entidad-relación:
 
-![DER](DER.png)
+![DER](DERV1.png)
 
 
 <h2>La forma de cargar, actualizar o eliminar fabricantes, preductos y componentes son:</h2>
