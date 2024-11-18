@@ -1,4 +1,4 @@
-const { Producto, Fabricante, Componente } = require('../../models');
+const { Producto, Fabricante, Componente } = require('../models');
 
 exports.getAllProductos = async (req, res) => {
   try {
@@ -51,32 +51,44 @@ exports.updateProducto = async (req, res) => {
 };
 
 exports.deleteProducto = async (req, res) => {
+  const {id} = req.params;
   try {
-    const { id } = req.params;
-    const producto = await Producto.findByPk(id);
-    if (producto) {
-      await producto.destroy();
-      res.status(200).json({ message: 'Producto eliminado' });
-    } else {
-      res.status(404).json({ message: 'Producto no encontrado' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+      const producto = await Producto.findByPk(id);
+      if(!producto){
+        res.status(404).json({message: 'El producto no existe'});
+      }
+      const fabricante = await Producto.findByPk(id, { include: 'Fabricantes' });
+      if (fabricante && fabricante.Fabricantes && fabricante.Fabricantes.length > 0) {
+          return res.status(400).json({ error: 'No se puede eliminar el producto porque tiene fabricantes asociados.' });
+      }
+      const componente = await Producto.findByPk(id, { include: 'Componentes' });
+      if (componente && componente.Componentes && componente.Componentes.length > 0) {
+          return res.status(400).json({ error: 'No se puede eliminar el producto porque tiene componentes asociados.' });
+      }
+      await producto.destroy()
+      return res.status(200).json({message: `El producto fue con id: ${id} fue eliminado correctamente`})
+    } catch (error) {
+        return res.status(500).json({message: 'Hubo un error al eliminar el producto', messageError: error});
+      }
 };
 
 exports.addFabricantesToProducto = async (req, res) => {
+  const { id } = req.params;
+  const { fabricanteIds } = req.body;
   try {
-    const { id } = req.params;
-    const { fabricanteIds } = req.body;
-    const producto = await Producto.findByPk(id);
-    if (!producto) return res.status(404).json({ message: 'Producto no encontrado' });
-
-    const fabricantes = await Fabricante.findAll({ where: { id: fabricanteIds } });
-    await producto.addFabricantes(fabricantes);
-    res.status(201).json({ message: 'Fabricantes añadidos al producto' });
+      const fabricantes = await Fabricante.findAll({where: {id: fabricanteIds}});
+      if (!fabricantes) {
+          return res.status(404).json({ error: `El ID ${fabricanteId} no corresponde a ningún fabricante.`});
+      }
+      const producto = await Producto.findByPk(id);
+      if (!producto) {
+          return res.status(404).json({ error: `El ID ${id} no corresponde a ningún producto.`});
+      }
+      await producto.addFabricantes(fabricantes);
+      return res.status(201).json({message: 'El fabricante fue asociado correctamente.', producto});
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      console.log(error);
+      return res.status(400).json({message:'Hubo un error al asociar el fabribante con el producto.'});
   }
 };
 

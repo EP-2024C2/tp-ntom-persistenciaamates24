@@ -1,4 +1,4 @@
-const { Fabricante, Producto } = require('../../models');
+const { Fabricante, Producto } = require('../models');
 
 exports.getAllFabricantes = async (req, res) => {
   try {
@@ -49,17 +49,20 @@ exports.updateFabricante = async (req, res) => {
 };
 
 exports.deleteFabricante = async (req, res) => {
+  const id = req.params.id
   try {
-    const { id } = req.params;
-    const fabricante = await Fabricante.findByPk(id);
-    if (fabricante) {
-      await fabricante.destroy();
-      res.status(200).json({ message: 'Fabricante eliminado' });
-    } else {
-      res.status(404).json({ message: 'Fabricante no encontrado' });
-    }
+      const fabricante = await Fabricante.findByPk(id)
+      if (!fabricante) {
+          return res.status(404).json({ error: `El ID ${id} no corresponde a ningún fabricante.`})
+      }
+      const producto = await Fabricante.findByPk(id, { include: 'Productos' });
+      if (producto && producto.Productos && producto.Productos.length > 0) {
+          return res.status(400).json({ error: 'No se puede eliminar el fabricante porque tiene productos asociados.' });
+      }
+      await fabricante.destroy()
+      res.status(200).json({ message: `Fabricante con ID ${id} eliminado con éxito.`})
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: 'Error al eliminar al fabricante.'})
   }
 };
 

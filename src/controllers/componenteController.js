@@ -1,17 +1,19 @@
-const { Componente, Producto } = require('../../models');
+const { Producto, Componente } = require('../models/index');
 
-exports.getAllComponentes = async (req, res) => {
+const componenteController = {}
+
+const getAllComponentes = async (req, res) => {
   try {
-    const componentes = await Componente.findAll({
-      include: [Producto]
-    });
-    res.status(200).json(componentes);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+    const componentes = await Componente.findAll()
+    res.status(200).json(componentes)
+    } 
+  catch (error) {
+    res.status(500).json({message: 'Hubo un error al obtener los componentes.', messageError: error})
+    }
 };
+componenteController.getAllComponentes = getAllComponentes
 
-exports.getComponenteById = async (req, res) => {
+const getComponenteById = async (req, res) => {
   try {
     const componente = await Componente.findByPk(req.params.id, { include: [Producto] });
     if (componente) {
@@ -23,8 +25,9 @@ exports.getComponenteById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+componenteController.getComponenteById = getComponenteById
 
-exports.createComponente = async (req, res) => {
+const createComponente = async (req, res) => {
   try {
     const { nombre, descripcion } = req.body;
     const nuevoComponente = await Componente.create({ nombre, descripcion });
@@ -33,8 +36,9 @@ exports.createComponente = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+componenteController.createComponente = createComponente
 
-exports.updateComponente = async (req, res) => {
+const updateComponente = async (req, res) => {
   try {
     const { id } = req.params;
     const { nombre, descripcion } = req.body;
@@ -49,23 +53,31 @@ exports.updateComponente = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+componenteController.updateComponente = updateComponente
 
-exports.deleteComponente = async (req, res) => {
-  try {
+const deleteComponente = async (req, res) => {
+  
     const { id } = req.params;
-    const componente = await Componente.findByPk(id);
-    if (componente) {
-      await componente.destroy();
-      res.status(200).json({ message: 'Componente eliminado' });
-    } else {
-      res.status(404).json({ message: 'Componente no encontrado' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    try {
+      const componente = await Componente.findByPk(id)
+      if (!componente) {
+          return res.status(404).json({ error: `El ID ${id} no corresponde a ningún componente.`})
+      }
+      const producto = await Componente.findByPk(id, { include: 'Productos' });
+      if (producto && producto.Productos && producto.Productos.length > 0) {
+          return res.status(400).json({ error: 'No se puede eliminar el componente porque tiene productos asociados.' });
+      }
+      await componente.destroy()
+      res.status(200).json({ message: `Componente de ID ${id}, eliminado con éxito.`})
   }
-};
+  catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el componente.'})
+  }
+}
 
-exports.getProductosByComponente = async (req, res) => {
+componenteController.deleteComponente = deleteComponente
+
+const getProductosByComponente = async (req, res) => {
   try {
     const componente = await Componente.findByPk(req.params.id, { include: [Producto] });
     if (!componente) return res.status(404).json({ message: 'Componente no encontrado' });
@@ -74,3 +86,6 @@ exports.getProductosByComponente = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+componenteController.getProductosByComponente = getProductosByComponente
+
+module.exports = componenteController

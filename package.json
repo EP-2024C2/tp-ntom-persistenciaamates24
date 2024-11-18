@@ -4,8 +4,8 @@
   "description": "Trabajo Practico M to N - -Grupo PersistenciaAMates24",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "sequelize": "npx sequelize-cli",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:seed": "npx sequelize-cli db:seed:all",
@@ -21,12 +21,13 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.18.2",
-    "sequelize": "^6.32.1",
-    "sqlite3": "^5.1.6"
+    "express": "^4.19.2",
+    "joi": "^17.13.3",
+    "sequelize": "^6.37.5",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0",
-    "sequelize-cli": "^6.6.0"
+    "nodemon": "^3.1.4",
+    "sequelize-cli": "^6.6.2"
   }
 }
